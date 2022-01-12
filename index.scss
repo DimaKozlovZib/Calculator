@@ -1,0 +1,127 @@
+body{
+	background: #00111C;
+	font-family: 'Ubuntu', sans-serif;
+}
+*{
+	padding: 0;
+	margin: 0;
+}
+ 
+.wrapper{
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+h1{
+	flex-grow: 1;
+	font-size: 24px;
+	color: #fff;
+	text-align: center;
+}
+
+.display{
+	min-height: 75px;;
+	content: '';
+	line-height: 0;
+	align-items: center;
+	flex-grow: 2;
+	text-align: right;
+	padding-top: 5px;
+	padding-right: 15px;
+	color: #F8F9FA;
+	font-size: 45px;
+	overflow-x: hidden;
+	display: flex;
+	justify-content: flex-end;
+}
+.box-interface{
+	flex-grow: 5;
+	margin-top: 10px;
+	display: grid;
+	grid-template-columns: 3fr 1fr;
+	text-align: center;
+	.button{
+		.small-functions-buttons{
+			font-size: 25px;
+			height: 20%;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			&__item{
+				background: #00253E;
+				margin: 2px;
+				cursor: pointer;
+				color: #DEE2E6;
+				display: flex;
+    	    	align-items: center;
+    	    	justify-content: center;
+    	    	transition: background-color , color 1.5s , 0.5s ease;
+				&:hover{
+					background-color: #002E4E;
+					color: #F8F9FA;
+				}
+			}
+		}
+		.button-second__box-Num{
+			height: 80%;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-areas: 
+			"a b c"
+			"a b c" 
+			"a b c"
+			"k k k";
+			.button-num__item{
+				background: #00253E;
+				margin: 2px;
+				font-size: 25px;
+				cursor: pointer;
+				color: #DEE2E6;
+				display: flex;
+    	    	align-items: center;
+    	    	justify-content: center;
+    	    	transition: background-color , color 1.5s , 0.5s ease;
+				&:last-child{
+					grid-area: k;
+				}
+				&:hover{
+					background-color: #002E4E;
+					color: #F8F9FA;
+				}
+			}
+		}
+	}
+	.button-function{
+		display: grid;
+		grid-template-columns: 1fr;
+		font-size: 30px;
+		&__item , &__item-result{
+			margin: 2px;
+			background: #00253E;
+			cursor: pointer;
+			color: #DEE2E6;
+			display: flex;
+        	align-items: center;
+        	justify-content: center;
+        	transition: background-color , color 1.5s , 0.5s ease;
+        	&:hover{
+				background-color: #002E4E;
+				color: #F8F9FA;
+			}
+			&[data-funMonkey="="]{
+				background-color: #F8F9FA;
+				color: #00111C;
+			}
+		}
+	}
+}
+@media (max-height: 550px) {
+	h1{
+		display: none;
+	}
+	.display{
+		font-size: 30px;
+	}
+	.small-functions-buttons , .button-num__item , .button-function , .small-functions-buttons__item{
+		font-size: 22px !important;
+	}
+}
