@@ -7,71 +7,114 @@ const calculator = {
 	display   : document.querySelector("#display"),
 	reset     : document.querySelector("#reset-button"),
 	clearLast : document.querySelector("#clear-last"),
-}
+	AllButton : document.querySelectorAll(".button"), 
+	tochka    : document.querySelector("#tochka"),
+};
 
-let expressionString = "";// выражение :)
-let lastAction = ""; // строка для проверки последнего действия
+let expressionString = new String("");// выражение :) global
+let lastAction = new String(""); // строка для проверки последнего действия global
+let tochkaStop = false;// переменная для открытия и закрытия функции добавления точки (.) , для уменьшения количества ошибок при функции результата.
 
 
 //слушатель цифр
 calculator.numBut.forEach((item) => {item.addEventListener("click", () => {
-	let value = item.querySelector(".text-box").textContent;//видемое значение
-	lastAction = "number"
+	let value = item.getAttribute('data-value'); //видемое значение
+	lastAction = "number";// последнее действие для правильного отображения выражения
 	lineOutput(value , value , false);// вызов функции для Display
 } ) } );
 
+
 //слушатель функций
 calculator.funcBut.forEach((item) => {item.addEventListener("click", () => {
-	let func = item.getAttribute('data-fun'),//не видемое значение
+	let   func = item.getAttribute('data-fun'),//не видемое значение
 		value = item.textContent;//видемое значение
-	if (lastAction == "") {
-		if (value === "-") {
-			lastAction = "function"
-			lineOutput(value , func , false , false);// вызов функции для Display
-		} else{ return 0;}
-	}
-	if (lastAction == "function") {
-		lineOutput(value , func , false , true);// вызов функции для Display
-		return "";
-	}
-	lastAction = "function"
+            lastLetter = expressionString.slice(-1);
+      if (lastLetter == func) {
+         return 0;   
+      }
+      if (expressionString == "" ) {
+            if (value === "-") {
+                tochkaStop = false; // открытия доступа к точке
+	            lastAction = "function"; // последнее действие для правильного отображения выражения
+	            return lineOutput(value , func , false , false);// вызов функции для Display  
+            } else { return 0;}
+      } 
+      if (lastAction == "function") {
+            tochkaStop = false; // открытия доступа к точке
+	      return lineOutput(value , func , false , true);// вызов функции для Display
+      }
+      console.log("hdbjhbjhdb")
+	tochkaStop = false; // открытия доступа к точке
+	lastAction = "function"; // последнее действие для правильного отображения выражения
 	lineOutput(value , func , false , false);// вызов функции для Display
 } ) } );
+
 
 // функция подсчёта результата
 calculator.result.addEventListener("click", () => {
 	try {
-	let expression = eval(expressionString);// главная вычислительная функция
-	typeof expression == "number" ? (lineOutput(`${expression}` , `${expression}`, true , false) , lastAction = "number") : lineOutput("" , "", true , false);// вызов функции для Display
+		let expression = eval(expressionString);// главная вычислительная функция
+            tochkaStop = false; // открытия доступа к точке
+		//return typeof expression == "number" ? (lineOutput(`${expression}` , `${expression}`, true , false) , lastAction = "number"/*// последнее действие для правильного отображения выражения */) : lineOutput("" , "", true , false);// вызов функции для Display
 	} catch(err) {
-		lineOutput("ошибка" , "ошибка", true , false);// вызов функции для Display
+            tochkaStop = false; // открытия доступа к точке
+		return lineOutput("ошибка" , "ошибка", true , false);// вызов функции для Display
 	}
 } );
 
+
+// слушатель точки 
+calculator.tochka.addEventListener("click", () =>{
+	if(!tochkaStop){
+		if (lastAction !== "number") {
+			lastAction = "number";// последнее действие для правильного отображения выражения
+			tochkaStop = true;// закрытие доступа к точке
+			return lineOutput("0." , "0." , false);// вызов функции для Display
+		}
+		tochkaStop = true;// закрытие доступа к точке
+		lastAction = "number";// последнее действие для правильного отображения выражения
+		return lineOutput("." , "." , false);// вызов функции для Display
+	}
+});
+
+
 // функция очистки дисплея
 calculator.reset.addEventListener("click", () => {
-	lastAction = "";
-	lineOutput("", "", true , false);// вызов функции для Display
+      tochkaStop = false; // открытия доступа к точке
+	lastAction = "";// последнее действие для правильного отображения выражения
+	return lineOutput("", "", true , false);// вызов функции для Display
 } );
 
+// функция удаления последнего символа
 calculator.clearLast.addEventListener("click", () => {
-	lineOutput("", "", false , true);// вызов функции для Display
+	return lineOutput("", "", false , true);// вызов функции для Display
 })
 
 
 
 
 function lineOutput(item , dataInfo , resultAndReset , clearLast){
+      let itIsFunction = new String()
+     
 	if (clearLast) {
-		expressionString = expressionString.slice(0, -1)
-		calculator.display.innerHTML = calculator.display.innerHTML.slice(0, -1)
+		expressionString = expressionString.slice(0, -1);
+		calculator.display.innerHTML = calculator.display.innerHTML.slice(0, -1);
 
-		if (expressionString === "") { lastAction = ""; }// если после удаления последнего символа , удалить последнее действие
-	} 
+            let lastLetter = expressionString.slice(-1)
+		if (lastAction !== "function"){
+                  if (("-+/*%".split("")).indexOf(lastLetter)) { lastAction = "function"}
+                  if (("1234567890.".split("")).indexOf(lastLetter)) { lastAction = "number"}
+            }
+
+
+            if (expressionString === "") { lastAction = ""; }// если после удаления последнего символа , удалить последнее действие
+	}
+      if (!(("+/*%".split("")).indexOf(dataInfo)) && expressionString === "") {
+            console.log("hello")
+            return 0;
+      }
 	if(!resultAndReset){
-		expressionString += dataInfo;
-		calculator.display.innerHTML += item;
-		return true;
+		return expressionString += dataInfo , calculator.display.innerHTML += item;
 	}
 	expressionString = dataInfo;
 	calculator.display.innerHTML = item;

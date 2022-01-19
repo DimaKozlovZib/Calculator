@@ -1,7 +1,4 @@
-body{
-	background: #00111C;
-	font-family: 'Ubuntu', sans-serif;
-}
+
 *{
 	padding: 0;
 	margin: 0;
@@ -20,19 +17,38 @@ h1{
 }
 
 .display{
-	min-height: 75px;;
+	min-height: 75px;
 	content: '';
 	line-height: 0;
 	align-items: center;
 	flex-grow: 2;
-	text-align: right;
 	padding-top: 5px;
 	padding-right: 15px;
 	color: #F8F9FA;
 	font-size: 45px;
-	overflow-x: hidden;
 	display: flex;
 	justify-content: flex-end;
+	
+}
+.button{
+	user-select: none;
+	font-size: 25px;
+	margin: 2px;
+	background: #00253E;
+	cursor: pointer;
+	color: #DEE2E6;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color , color 1.5s , 0.5s ease;
+    &:hover{
+		background-color: #002E4E;
+		color: #F8F9FA;
+	}
+	&[data-funMonkey="="]{
+		background-color: #F8F9FA;
+		color: #00111C;
+	}
 }
 .box-interface{
 	flex-grow: 5;
@@ -40,26 +56,11 @@ h1{
 	display: grid;
 	grid-template-columns: 3fr 1fr;
 	text-align: center;
-	.button{
+	.button-top-box{
 		.small-functions-buttons{
-			font-size: 25px;
 			height: 20%;
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			&__item{
-				background: #00253E;
-				margin: 2px;
-				cursor: pointer;
-				color: #DEE2E6;
-				display: flex;
-    	    	align-items: center;
-    	    	justify-content: center;
-    	    	transition: background-color , color 1.5s , 0.5s ease;
-				&:hover{
-					background-color: #002E4E;
-					color: #F8F9FA;
-				}
-			}
 		}
 		.button-second__box-Num{
 			height: 80%;
@@ -69,23 +70,10 @@ h1{
 			"a b c"
 			"a b c" 
 			"a b c"
-			"k k k";
+			"k k c";
 			.button-num__item{
-				background: #00253E;
-				margin: 2px;
-				font-size: 25px;
-				cursor: pointer;
-				color: #DEE2E6;
-				display: flex;
-    	    	align-items: center;
-    	    	justify-content: center;
-    	    	transition: background-color , color 1.5s , 0.5s ease;
-				&:last-child{
+				&[data-value = "0" ]{
 					grid-area: k;
-				}
-				&:hover{
-					background-color: #002E4E;
-					color: #F8F9FA;
 				}
 			}
 		}
@@ -95,18 +83,6 @@ h1{
 		grid-template-columns: 1fr;
 		font-size: 30px;
 		&__item , &__item-result{
-			margin: 2px;
-			background: #00253E;
-			cursor: pointer;
-			color: #DEE2E6;
-			display: flex;
-        	align-items: center;
-        	justify-content: center;
-        	transition: background-color , color 1.5s , 0.5s ease;
-        	&:hover{
-				background-color: #002E4E;
-				color: #F8F9FA;
-			}
 			&[data-funMonkey="="]{
 				background-color: #F8F9FA;
 				color: #00111C;
