@@ -10,7 +10,7 @@
 	flex-direction: column;
 }
 h1{
-	flex-grow: 1;
+	flex-grow: 0.5;
 	font-size: 24px;
 	color: #fff;
 	text-align: center;
@@ -19,16 +19,22 @@ h1{
 .display{
 	min-height: 75px;
 	content: '';
-	line-height: 0;
-	align-items: center;
-	flex-grow: 2;
+	height: 100%;
+	width: auto;
+	overflow: auto;
 	padding-top: 5px;
 	padding-right: 15px;
 	color: #F8F9FA;
 	font-size: 45px;
+	align-items: center;
+	display: -webkit-box;
+	justify-content: flex-end;
+}
+.display-box{
+	align-items: center;
 	display: flex;
 	justify-content: flex-end;
-	
+	flex-grow: 1.5;
 }
 .button{
 	user-select: none;
@@ -52,7 +58,7 @@ h1{
 }
 .box-interface{
 	flex-grow: 5;
-	margin-top: 10px;
+	margin-top: 4px;
 	display: grid;
 	grid-template-columns: 3fr 1fr;
 	text-align: center;

@@ -26,24 +26,27 @@ calculator.numBut.forEach((item) => {item.addEventListener("click", () => {
 
 //слушатель функций
 calculator.funcBut.forEach((item) => {item.addEventListener("click", () => {
-	let   func = item.getAttribute('data-fun'),//не видемое значение
-		value = item.textContent;//видемое значение
-            lastLetter = expressionString.slice(-1);
-      if (lastLetter == func) {
-         return 0;   
-      }
-      if (expressionString == "" ) {
-            if (value === "-") {
-                tochkaStop = false; // открытия доступа к точке
-	            lastAction = "function"; // последнее действие для правильного отображения выражения
-	            return lineOutput(value , func , false , false);// вызов функции для Display  
-            } else { return 0;}
-      } 
-      if (lastAction == "function") {
+    //.................................................................................................................
+    
+	let func = item.getAttribute('data-fun');//не видемое значение
+	let	value = item.textContent;//видемое значение
+    let lastLetter = expressionString.slice(-1);
+
+    //.................................................................................................................
+    if (lastLetter == func) {
+       return 0;   
+    }
+    if (expressionString == "" ) {
+        if (value === "-") {
             tochkaStop = false; // открытия доступа к точке
-	      return lineOutput(value , func , false , true);// вызов функции для Display
-      }
-      console.log("hdbjhbjhdb")
+	        lastAction = "function"; // последнее действие для правильного отображения выражения
+	        return lineOutput(value , func , false , false);// вызов функции для Display  
+        } else { return 0;}
+    } 
+    if (lastAction == "function") {
+        tochkaStop = false; // открытия доступа к точке
+	    return lineOutput(value , func , false , true);// вызов функции для Display
+    }
 	tochkaStop = false; // открытия доступа к точке
 	lastAction = "function"; // последнее действие для правильного отображения выражения
 	lineOutput(value , func , false , false);// вызов функции для Display
@@ -53,9 +56,14 @@ calculator.funcBut.forEach((item) => {item.addEventListener("click", () => {
 // функция подсчёта результата
 calculator.result.addEventListener("click", () => {
 	try {
+		//.................................................................................................................
+
 		let expression = eval(expressionString);// главная вычислительная функция
             tochkaStop = false; // открытия доступа к точке
-		//return typeof expression == "number" ? (lineOutput(`${expression}` , `${expression}`, true , false) , lastAction = "number"/*// последнее действие для правильного отображения выражения */) : lineOutput("" , "", true , false);// вызов функции для Display
+
+		//.................................................................................................................
+
+		return typeof expression == "number" ? (lineOutput(`${expression}` , `${expression}`, true , false) , lastAction = "number"/*// последнее действие для правильного отображения выражения */) : lineOutput("" , "", true , false);// вызов функции для Display
 	} catch(err) {
             tochkaStop = false; // открытия доступа к точке
 		return lineOutput("ошибка" , "ошибка", true , false);// вызов функции для Display
@@ -80,7 +88,7 @@ calculator.tochka.addEventListener("click", () =>{
 
 // функция очистки дисплея
 calculator.reset.addEventListener("click", () => {
-      tochkaStop = false; // открытия доступа к точке
+    tochkaStop = false; // открытия доступа к точке
 	lastAction = "";// последнее действие для правильного отображения выражения
 	return lineOutput("", "", true , false);// вызов функции для Display
 } );
@@ -94,27 +102,27 @@ calculator.clearLast.addEventListener("click", () => {
 
 
 function lineOutput(item , dataInfo , resultAndReset , clearLast){
-      let itIsFunction = new String()
-     
 	if (clearLast) {
 		expressionString = expressionString.slice(0, -1);
 		calculator.display.innerHTML = calculator.display.innerHTML.slice(0, -1);
 
-            let lastLetter = expressionString.slice(-1)
-		if (lastAction !== "function"){
-                  if (("-+/*%".split("")).indexOf(lastLetter)) { lastAction = "function"}
-                  if (("1234567890.".split("")).indexOf(lastLetter)) { lastAction = "number"}
-            }
+		//.................................................................................................................
 
+        let lastLetter = expressionString.slice(-1)
+		if (item == ""){
+            if (("-+/*%".split("")).indexOf(lastLetter) !== -1) { lastAction = "function"}
+            if (("1234567890.".split("")).indexOf(lastLetter) !== -1) { lastAction = "number"}
+			if (expressionString === "") { lastAction = ""; }// если после удаления последнего символа , удалить последнее действие
+        }
 
-            if (expressionString === "") { lastAction = ""; }// если после удаления последнего символа , удалить последнее действие
+		//................................................................................................................
 	}
-      if (!(("+/*%".split("")).indexOf(dataInfo)) && expressionString === "") {
-            console.log("hello")
+        if ("/+*%".split("").indexOf(dataInfo) !== -1 && expressionString === "") {
             return 0;
-      }
+        }
 	if(!resultAndReset){
-		return expressionString += dataInfo , calculator.display.innerHTML += item;
+		expressionString += dataInfo , calculator.display.innerHTML += item;
+        return calculator.display.scrollLeft = 100000000000000;
 	}
 	expressionString = dataInfo;
 	calculator.display.innerHTML = item;
