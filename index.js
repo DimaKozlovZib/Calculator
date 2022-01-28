@@ -3,7 +3,7 @@
 const calculator = {
 	numBut    : document.querySelectorAll(".button-num__item"),
 	funcBut   : document.querySelectorAll(".button-function__item"),
-	result    : document.querySelector(".button-function__item-result"),
+	result    : document.querySelector("#result"),
 	display   : document.querySelector("#display"),
 	reset     : document.querySelector("#reset-button"),
 	clearLast : document.querySelector("#clear-last"),
@@ -17,7 +17,7 @@ let tochkaStop = false;// переменная для открытия и зак
 
 
 //слушатель цифр
-calculator.numBut.forEach((item) => {item.addEventListener("click", () => {
+calculator.numBut.forEach(item => {item.addEventListener("click", () => {
 	let value = item.getAttribute('data-value'); //видемое значение
 	lastAction = "number";// последнее действие для правильного отображения выражения
 	lineOutput(value , value , false);// вызов функции для Display
@@ -25,7 +25,7 @@ calculator.numBut.forEach((item) => {item.addEventListener("click", () => {
 
 
 //слушатель функций
-calculator.funcBut.forEach((item) => {item.addEventListener("click", () => {
+calculator.funcBut.forEach(item => {item.addEventListener("click", () => {
     //.................................................................................................................
     
 	let func = item.getAttribute('data-fun');//не видемое значение
@@ -33,9 +33,7 @@ calculator.funcBut.forEach((item) => {item.addEventListener("click", () => {
     let lastLetter = expressionString.slice(-1);
 
     //.................................................................................................................
-    if (lastLetter == func) {
-       return 0;   
-    }
+    if (lastLetter == func) { return 0;}
     if (expressionString == "" ) {
         if (value === "-") {
             tochkaStop = false; // открытия доступа к точке
@@ -65,7 +63,7 @@ calculator.result.addEventListener("click", () => {
 
 		return typeof expression == "number" ? (lineOutput(`${expression}` , `${expression}`, true , false) , lastAction = "number"/*// последнее действие для правильного отображения выражения */) : lineOutput("" , "", true , false);// вызов функции для Display
 	} catch(err) {
-            tochkaStop = false; // открытия доступа к точке
+        tochkaStop = false; // открытия доступа к точке
 		return lineOutput("ошибка" , "ошибка", true , false);// вызов функции для Display
 	}
 } );
@@ -78,10 +76,11 @@ calculator.tochka.addEventListener("click", () =>{
 			lastAction = "number";// последнее действие для правильного отображения выражения
 			tochkaStop = true;// закрытие доступа к точке
 			return lineOutput("0." , "0." , false);// вызов функции для Display
-		}
-		tochkaStop = true;// закрытие доступа к точке
-		lastAction = "number";// последнее действие для правильного отображения выражения
-		return lineOutput("." , "." , false);// вызов функции для Display
+		} else {
+            tochkaStop = true;// закрытие доступа к точке
+		    return lineOutput("." , "." , false);// вызов функции для Display
+        }
+		
 	}
 });
 
@@ -100,30 +99,29 @@ calculator.clearLast.addEventListener("click", () => {
 
 
 
-
 function lineOutput(item , dataInfo , resultAndReset , clearLast){
+	let lastLetter = expressionString.slice(-1)//последний символ в строке
 	if (clearLast) {
 		expressionString = expressionString.slice(0, -1);
 		calculator.display.innerHTML = calculator.display.innerHTML.slice(0, -1);
 
 		//.................................................................................................................
 
-        let lastLetter = expressionString.slice(-1)
 		if (item == ""){
-            if (("-+/*%".split("")).indexOf(lastLetter) !== -1) { lastAction = "function"}
-            if (("1234567890.".split("")).indexOf(lastLetter) !== -1) { lastAction = "number"}
-			if (expressionString === "") { lastAction = ""; }// если после удаления последнего символа , удалить последнее действие
+            lastLetter = expressionString.slice(-1)
+            if (("-+/*%".split("")).indexOf(lastLetter) !== -1) { lastAction = "function"}// получение посленего действия если поледний символ был функцией
+            if (("1234567890.".split("")).indexOf(lastLetter) !== -1) { lastAction = "number"}// получение посленего действия если поледний символ был цифрой
+			if (expressionString === "") { lastAction = ""; }// после удаления последнего символа в строке, удалить последнее действие
         }
 
 		//................................................................................................................
-	}
-        if ("/+*%".split("").indexOf(dataInfo) !== -1 && expressionString === "") {
-            return 0;
-        }
-	if(!resultAndReset){
+	};
+	if (lastAction === "function" && dataInfo !== "-" && expressionString === "") { return 0; }
+
+	if (!resultAndReset){
 		expressionString += dataInfo , calculator.display.innerHTML += item;
         return calculator.display.scrollLeft = 100000000000000;
 	}
 	expressionString = dataInfo;
-	calculator.display.innerHTML = item;
+	return calculator.display.innerHTML = item;
 }

@@ -51,10 +51,11 @@ h1{
 		background-color: #002E4E;
 		color: #F8F9FA;
 	}
-	&[data-funMonkey="="]{
-		background-color: #F8F9FA;
-		color: #00111C;
-	}
+	
+}
+#result{
+	background-color: #F8F9FA;
+	color: #00111C;
 }
 .box-interface{
 	flex-grow: 5;
